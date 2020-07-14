@@ -1,0 +1,30 @@
+.main-map {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.div-link-map {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around;
+  width: 750px;
+  font-size: 20px;
+}
+.div-link-map a {
+  color: #000;
+}
+.div-link-map a:hover {
+  border-bottom: 1px solid #000;
+}
+@media (max-width: 750px) {
+  .div-link-map {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+  .div-link-map a {
+    margin: 5px;
+  }
+}
