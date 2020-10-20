@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 
 import api from "../../services/api";
 
+import { useDispatch } from 'react-redux'
+import { saveDeliveryLocation } from '../../actions'
+
 import Swal from "sweetalert2";
 
 import "./styles.css";
 
 const ListDelivery = () => {
+  const dispatch = useDispatch()
   const [listDelivery, setListDelivery] = useState([]);
   useEffect(() => {
     const getListDelivery = async () => {
@@ -40,10 +44,6 @@ const ListDelivery = () => {
       });
     }
   };
-  const saveDatasInLocalStorage = (initial_point, end_point) => {
-    localStorage.setItem("initial_point", initial_point);
-    localStorage.setItem("end_point", end_point);
-  };
 
   const parseDateToPTBR = (date) => {
     const datePTBR = date.split("-");
@@ -74,34 +74,30 @@ const ListDelivery = () => {
               start_point_delivery,
               end_point_delivery,
             }) => (
-              <tr key={_id}>
-                <td data-label="Nome do cliente">{name}</td>
-                <td data-label="Data da entrega">
-                  {parseDateToPTBR(delivery_date.split("T")[0])}
-                </td>
-                <td data-label="Ponto de entrega">{start_point_delivery}</td>
-                <td data-label="Ponto de destino">{end_point_delivery}</td>
-                <td data-label="Ações">
-                  <button
-                    className="map-button"
-                    onClick={() =>
-                      saveDatasInLocalStorage(
-                        start_point_delivery,
-                        end_point_delivery
-                      )
-                    }
-                  >
-                    <Link to={`/map/${_id}`}>Ver trajeto</Link>
+                <tr key={_id}>
+                  <td data-label="Nome do cliente">{name}</td>
+                  <td data-label="Data da entrega">
+                    {parseDateToPTBR(delivery_date.split("T")[0])}
+                  </td>
+                  <td data-label="Ponto de entrega">{start_point_delivery}</td>
+                  <td data-label="Ponto de destino">{end_point_delivery}</td>
+                  <td data-label="Ações">
+                    <button
+                      className="map-button"
+                      onClick={() => dispatch(saveDeliveryLocation(start_point_delivery, end_point_delivery))
+                      }
+                    >
+                      <Link to={`/map/${_id}`}>Ver trajeto</Link>
+                    </button>
+                    <button
+                      className="delete-button"
+                      onClick={() => deleteDelivery(_id)}
+                    >
+                      Deletar
                   </button>
-                  <button
-                    className="delete-button"
-                    onClick={() => deleteDelivery(_id)}
-                  >
-                    Deletar
-                  </button>
-                </td>
-              </tr>
-            )
+                  </td>
+                </tr>
+              )
           )}
         </tbody>
       </table>

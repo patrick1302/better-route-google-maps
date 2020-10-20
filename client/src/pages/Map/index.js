@@ -11,18 +11,19 @@ import polyline from "@mapbox/polyline";
 
 import api from "../../services/api";
 
+import { useSelector } from 'react-redux'
+
 import "./styles.css";
 
 const Map = () => {
   const [routeEncode, setRouteEncode] = useState("");
-  const initial_point = localStorage.getItem("initial_point");
-  const end_point = localStorage.getItem("end_point");
+  const { startPoint, endPoint } = useSelector(state => state.saveLocation);
 
   useEffect(() => {
     const getBetterRoute = async () => {
       try {
-        const origin = encodeURI(initial_point);
-        const destination = encodeURI(end_point);
+        const origin = encodeURI(startPoint);
+        const destination = encodeURI(endPoint);
 
         const points = await api.post(
           `/getRoutes?origin=${origin}&destination=${destination}`
@@ -44,10 +45,10 @@ const Map = () => {
   return (
     <main className="main-map">
       <div className="div-link-map">
-        <Link to="/">Ir para tela de registro de entregas</Link>
-        <Link to="/list_delivery">Exibir lista de entregas</Link>
+        <Link to="/">Registro de entregas</Link>
+        <Link to="/list_delivery">Lista de entregas</Link>
       </div>
-      <h2>{`Trajeto de ${initial_point} até ${end_point}`}</h2>
+      <h2>{`Trajeto de ${startPoint} até ${endPoint}`}</h2>
 
       <LoadScript
         className="load"
